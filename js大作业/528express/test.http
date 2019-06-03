@@ -1,0 +1,28 @@
+GET http://localhost:4000/products
+###
+POST http://localhost:4000/api/chakan
+###
+POST http://localhost:4000/api/look
+###
+DELETE  http://localhost:4000/api/delete/5cf48f4bfb99c76519b4450b
+###
+POST http://localhost:4000/api/findpaihang
+
+###
+POST http://localhost:4000/api/new
+###
+POST http://localhost:4000/products
+Content-Type:application/json
+
+
+{
+    "title":"产品4"
+}
+###
+PUT http://localhost:4000/products/5cef44fd3d2e13830cd3a588
+Content-Type: application/json
+
+{
+    "title":"产品100"
+}
+

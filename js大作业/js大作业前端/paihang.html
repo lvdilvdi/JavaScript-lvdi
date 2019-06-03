@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	</head>
+	<style>
+		span {
+			color: #525C66;
+			text-decoration: none;
+		}
+		.top-10 {
+			position: relative;
+			float: left;
+			width: 340px;
+			
+			margin: 10px 600px;
+			background: #fff;
+			border: 1px solid #FFF;
+			box-shadow: #d0d0d0 1px 1px 10px 0px;
+		}
+		#biaoti{
+			width: 340px;
+			margin: 10px 720px;
+		}
+		.top-10 ul {
+			counter-reset: section;
+		}
+
+		.top-10 li {
+			float: left;
+			width: 260px;
+			border-bottom: 1px solid #b8c2cc;
+			line-height: 46px;
+			height: 46px;
+			overflow: hidden;
+			color: #525C66;
+			font-size: 14px;
+
+		}
+
+		.top-10 li:before {
+			counter-increment: section;
+			content: counter(section);
+			display: inline-block;
+			padding: 0 12px;
+			margin-right: 10px;
+			height: 18px;
+			line-height: 18px;
+			background: #0164b4;
+			color: #fff;
+			border-radius: 3px;
+			font-size: 9px
+		}
+		.main{
+			height: 1000px;
+			width: 1000px;
+		}
+		.again{
+			 	height: 50px;
+			    width: 170px;
+			    position: absolute;
+			    left: 50px;
+			    top: 50px;
+			    background-image: url('img/begin.png');
+			    background-size: 100% 100%;
+				cursor: pointer;
+		}
+		
+	</style>
+
+	<body>
+		<div class="main">
+			
+		
+		<div id="biaoti">
+			<h1>排行榜</h1>
+		</div>
+		<div class="top-10">
+			<ul>
+				<li><span id="n1">快来占领吧！</span></li>
+				<li><a id="n2">快来占领吧！</a></li>
+				<li><a id="n3">快来占领吧！03</a></li>
+				<li><a id="n4">快来占领吧！04</a></li>
+				<li><a id="n5">快来占领吧！05</a></li>
+				<li><a id="n6">快来占领吧！06</a></li>
+				<li><a id="n7">快来占领吧！07</a></li>
+				<li><a id="n8">快来占领吧！08</a></li>
+				<li><a id="n9">快来占领吧！09</a></li>
+				<li><a id="n10">快来占领吧！10</a></li>
+			</ul>
+		</div>
+		<button></button>
+		<div class="again">
+			<img src="game/img/begin.png" onclick="again()"/>
+		</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		var na=null;
+		function again(){
+		var str = window.location.search;
+   		 if (str.indexOf(name) != -1) {
+        var pos_start = str.indexOf(name) + name.length + 1;
+        var pos_end = str.indexOf("&", pos_start);
+        
+        var name1=str.substring(pos_start);
+        window.location.href="./game/game.html?name="+na;
+        
+        }
+		}
+		function get_time_diff(time) {
+			 var diff = '';
+			 var time_diff =time;
+			 // 计算相差天数 
+			 var days = Math.floor(time_diff / (24 * 3600 * 1000));
+			 if (days > 0) {
+			 diff += days + '天';
+			 }
+			 // 计算相差小时数 
+			 var leave1 = time_diff % ( 24 * 3600 * 1000); 
+			 var hours = Math.floor(leave1 / (3600 * 1000));
+			 if (hours > 0) {
+			 diff += hours + '小时';
+			 } else {
+			 if (diff !== '') {
+			 diff += hours + '小时';
+			 }
+			 }
+			 // 计算相差分钟数 
+			 var leave2 =leave1 % (3600 * 1000);
+			 var minutes = Math.floor(leave2 / (60 * 1000));
+			 if (minutes > 0) {
+			 diff += minutes + '分';
+			 } else {
+			 if (diff !== '') {
+			 diff += minutes + '分';
+			 }
+			 }
+			 // 计算相差秒数 
+			 var leave3 = leave2%(60*1000);
+			 var seconds = Math.round(leave3/1000);
+			 if (seconds > 0) {
+			 diff += seconds + '秒';
+			 } else {
+			 if (diff !== '') {
+			 diff += seconds + '秒';
+			 }
+			 }
+			 
+			 return diff;
+			}
+		window.onload=function(){
+		var thisURL = document.URL;
+		var getval =thisURL.split('?')[1];
+		var keyValue = getval.split('&');
+		var oneKeyValue = keyValue[0];
+		var oneValue = oneKeyValue.split("=")[1];
+		var twoKeyValue = keyValue[1];
+		var twoValue = twoKeyValue.split("=")[1];	
+		na=oneValue;
+		var t1=document.getElementById("n1");
+		var t2=document.getElementById("n2");	
+		var t3=document.getElementById("n3");	
+		var t4=document.getElementById("n4");	
+		var t5=document.getElementById("n5");	
+		var t6=document.getElementById("n6");	
+		var t7=document.getElementById("n7");	
+		var t8=document.getElementById("n8");	
+		var t9=document.getElementById("n9");	
+		var t10=document.getElementById("n10");	
+		alert(oneValue+twoValue);	
+		var name=oneValue;
+		var time=twoValue;
+		var data;
+		
+		axios.post('http://localhost:4000/api/look',{
+			
+		}).then(function(response){
+			var da=response.data;
+			console.log(da);
+			var sorted_keys_array = Object.keys(da).sort((a,b)=>{
+			       return da[a].usetime-da[b].usetime;
+			});
+			console.log(sorted_keys_array);
+			t1.innerHTML=response.data[sorted_keys_array[0]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[0]].usetime);	
+			t2.innerHTML=response.data[sorted_keys_array[1]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[1]].usetime);	
+			t3.innerHTML=response.data[sorted_keys_array[2]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[2]].usetime);	
+			t4.innerHTML=response.data[sorted_keys_array[3]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[3]].usetime);	
+			t5.innerHTML=response.data[sorted_keys_array[4]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[4]].usetime);	
+			t6.innerHTML=response.data[sorted_keys_array[5]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[5]].usetime);	
+			t7.innerHTML=response.data[sorted_keys_array[6]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[6]].usetime);	
+			t8.innerHTML=response.data[sorted_keys_array[7]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[7]].usetime);	
+			t9.innerHTML=response.data[sorted_keys_array[8]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[8]].usetime);	
+			t10.innerHTML=response.data[sorted_keys_array[9]].name+" 用时："+get_time_diff(response.data[sorted_keys_array[9]].usetime);	
+			}).catch(function(error){
+				console.log(error);
+		})
+		
+	
+		
+		
+	}
+
+	</script>
+</html>

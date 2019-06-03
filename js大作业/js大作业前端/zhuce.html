@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<style type="text/css">
+			body{  
+			margin-left:auto;  
+			margin-right:auto; 
+			margin-TOP:100PX; 
+			width:20em;  
+			background-image: url('img/denglubg.jpg');
+			background-size: cover;
+			}
+		</style>
+	</head>
+	<body>
+		<form id="form1">
+
+		 <div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1"style="color: white;">账&emsp;&emsp;号：</span>
+		  <input id="txtUserName" type="text" class="form-control" placeholder="大于6位用户名">
+		</div>
+		<br>
+		<!--下面是密码输入框-->
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1"style="color: white;">密&emsp;&emsp;码：</span>
+		  <input id="txtPassword" type="password" class="form-control" placeholder="大于6位密码">
+		</div>
+		
+		<br>
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon2"style="color: white;">确认密码：</span>
+		  <input id="txtPassword2" type="password" class="form-control" placeholder="大于6位密码">
+		</div>
+		<br>
+		<button type="button"  OnClick="zhuce()" style="width:280px;" class="btn btn-default">注册</button>
+		<br>
+			<button type="button"  OnClick="comeback()" style="width:280px;margin-top: 20px;" class="btn btn-default">返回</button>
+		</form>
+	</body>
+	<script type="text/javascript">
+		function zhuce(){
+			var n=document.getElementById("txtUserName").value;
+			var pwd1=document.getElementById("txtPassword").value;
+			var pwd2=document.getElementById("txtPassword2").value;
+			if(pwd1===pwd2&&n.length>=6&&pwd1.length>=6){
+				
+				axios.post('http://localhost:4000/api/zhuce',{
+				name:n,
+				password:pwd1,
+				usetime:86400000,
+			}).then(function(response){
+				
+				if(response.data.st==="unsuccess"){
+					alert("账号已存在");
+				}else if(response.data.st==="success"){
+					alert("注册成功！");
+				}
+			}).catch(function(error){
+				console.log(error);
+			})
+		}else{
+				if(pwd1!=pwd2){
+					alert("密码不一致");
+				}else if(n.length<6){
+					alert("账号长度需要大于6位");
+				}else if(pwd1.length<6){
+					alert("密码长度需要大于6位");
+				}
+				
+			}
+			
+		}
+		function comeback(){
+			window.location.href="index.html";
+		}
+	</script>
+</html>

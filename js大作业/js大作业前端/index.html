@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<style type="text/css">
+			body{  
+			margin-left:auto;  
+			margin-right:auto; 
+			margin-TOP:50PX; 
+			width:15em;  
+			background-image: url('img/denglubg.jpg');
+			background-size: cover;
+			}
+			.wrap{
+        	height:390px;  
+        	width:1000px;  
+        	overflow: hidden;  
+        	position: relative;  
+        	margin:50px -130px 0px;
+        	}
+        .wrap ul{
+        	position:absolute;
+        	}
+        .wrap ul li{
+        	position: absolute;
+        	height:390px;
+        	left: 0;
+        	top: 0;
+        	}
+        .wrap ol{
+        	position:absolute;  
+        	left:500px;  
+        	bottom:10px;
+        	}
+        .wrap ol li{
+        	height:20px; 
+        	width: 20px;   
+        	border:solid 1px #666;  
+        	border-radius:10px;
+        	margin-left:5px;  
+        	color:#fff;  
+        	float:left;  
+        	line-height:center;  
+        	text-align:center;  
+        	cursor:pointer;
+        	}
+        .wrap ol .on{
+        	background:rgba(0,0,0,0.2);  
+        	color:#fff;
+        	}
+        	
+        	
+        	/*#main{
+        		width: 1000px;
+				height: 1000px;
+				background: ;
+				margin: 0 auto;
+				position:relative;
+				background:;
+        		border:solid 1px #666
+        	}*/
+        	#name{
+        		margin: 0px 40px;
+        		font-family:Cursive;
+        		color: white;
+        	}
+		</style>
+	</head>
+	<body>
+		<div id="name">
+			<h1>扫雷大战</h1>
+		</div>
+		<form id="form1">
+
+		 <div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1"style="color: white;">账号：</span>
+		  <input id="txtUserName" type="text" class="form-control" placeholder="用户名">
+		</div>
+		<br>
+		<!--下面是密码输入框-->
+		<div class="input-group">
+		  <span class="input-group-addon" id="basic-addon1"style="color: white;">密码：</span>
+		  <input id="txtPassword" type="password" class="form-control" placeholder="密码">
+		</div>
+		<br>
+
+		<button type="button"  OnClick="denglu()" style="width:230px;border-radius:5px;" class="btn btn-default">登 录</button>
+		<button type="button"  OnClick="zhuce()" style="width:230px;margin-top: 20px;border-radius:5px;" class="btn btn-default">注 册</button>
+		</form>
+		<div id="">
+			
+		</div>
+		<div class="wrap" id='wrap'>
+   				 <ul id="pic">
+       				 <li><img src="img/game1.jpg" alt=""></li>
+       				 <li><img src="img/game2.jpg" alt=""></li>
+      			     <li><img src="img/game3.jpg" alt=""></li>
+        			 <li><img src="img/game4.jpg" alt=""></li>
+
+    			 </ul>
+    			 <ol id="list">
+      			   <li class="on">1</li>
+      			   <li>2</li>
+       		 	   <li>3</li>
+       			   <li>4</li>
+
+   				 </ol>
+		</div>
+	</body>
+	<script type="text/javascript">
+		function denglu(){
+			var name1=document.getElementById("txtUserName").value;
+			var pwd=document.getElementById("txtPassword").value;
+			axios.post('http://localhost:4000/api/denglu',{
+				name:name1,
+				password:pwd,
+			}).then(function(response){
+				if(response.data.st==="unsuccess"){
+					alert("账号不存在或者密码错误");
+				}else if(response.data.st==="success"){
+					window.location.href="game/game.html?name="+name1;
+				}
+			}).catch(function(error){
+				console.log(error);
+			})
+		}
+		function zhuce(){
+			window.location.href="zhuce.html";
+		}
+		
+		window.onload=function(){
+       	var wrap=document.getElementById("wrap");
+       	var pic=document.getElementById("pic").getElementsByTagName("li");
+       	var list=document.getElementById("list").getElementsByTagName("li");
+       	var index=0;
+       	var timer=null;
+       	timer=setInterval(autoplay,2000);
+       	
+       	for(var i=0;i<pic.length;i++){
+       		pic[i].style.zIndex=10-i;
+       	}
+       	document.getElementById("list").style.zIndex=20;
+       	wrap.onmouseover=function(){
+       		clearInterval(timer);
+       	}
+       	wrap.onmouseout=function(){
+       		timer=setInterval(autoplay,2000);
+       	}
+       	
+       	
+       	for(var i=0;i<list.length;i++){
+       		list[i].onclick=function(){
+       			clearInterval(timer);
+       			index=this.innerText-1;
+       			showPic(index);
+       		}
+       		
+       		
+       	}
+       	
+       	function autoplay(){
+       		if(++index>=list.length){
+       			index=0;
+       			
+       		}
+       		showPic(index);
+       	}
+       	
+       	
+       	//showPic(1);
+       	function showPic(curIndex){
+       		for(var i=0;i<list.length;i++){
+       			pic[i].style.opacity=0;
+       			list[i].className="";
+       			
+       		}
+       		changeOpacity(curIndex);
+       		//pic[curIndex].style.opacity=1;
+       		list[curIndex].className="on";
+       	}
+       	function changeOpacity(curIndex){
+       		var x=parseFloat(pic[curIndex].style.opacity);
+       		pic[curIndex].style.opacity=0.05+x;
+       		if(parseFloat(pic[curIndex].style.opacity)<=1.0){
+       			timer1=setTimeout(function(){
+       				changeOpacity(curIndex);
+       			},20);
+       		}else{
+       			clearTimeout(timer1);
+       		}
+       	}
+       }
+	</script>
+</html>
